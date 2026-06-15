@@ -1,0 +1,340 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap");
+@font-face {
+  font-family: 'ZenMaruGothic-Medium';
+  src: url("/fonts/ZenMaruGothic-Medium.ttf") format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: var(--page-bg);
+  color: rgba(0,0,0,0.9);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+:root.dark body {
+  color: rgba(255,255,255,0.9);
+}
+.card-base {
+  border-radius: var(--radius-large);
+  overflow: hidden;
+  background-color: var(--card-bg);
+  transition: background-color 0.15s ease, color 0.15s ease, backdrop-filter 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+body.glassmorphism .card-base {
+  background-color: var(--card-glass-bg);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  border: 1px solid var(--card-glass-border);
+}
+body.glassmorphism .post-card:hover,
+body.glassmorphism .profile-card:hover,
+body.glassmorphism .sidebar-widget:hover,
+body.glassmorphism .stat-card:hover,
+body.glassmorphism .home-welcome:hover {
+  background-color: rgba(255,255,255,0.75);
+}
+:root.dark body.glassmorphism .post-card:hover,
+:root.dark body.glassmorphism .profile-card:hover,
+:root.dark body.glassmorphism .sidebar-widget:hover,
+:root.dark body.glassmorphism .stat-card:hover,
+:root.dark body.glassmorphism .home-welcome:hover {
+  background-color: rgba(35,35,35,0.75);
+}
+body.glassmorphism #navbar.scrolled > div {
+  background-color: var(--card-glass-bg) !important;
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+}
+.banner-text-overlay.scrolled-past {
+  opacity: 0;
+  pointer-events: none;
+}
+.card-shadow {
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.005));
+}
+.text-90 {
+  color: rgba(0,0,0,0.9);
+}
+:root.dark .text-90 {
+  color: rgba(255,255,255,0.9);
+}
+.text-75 {
+  color: rgba(0,0,0,0.75);
+}
+:root.dark .text-75 {
+  color: rgba(255,255,255,0.75);
+}
+.text-50 {
+  color: rgba(0,0,0,0.5);
+}
+:root.dark .text-50 {
+  color: rgba(255,255,255,0.5);
+}
+.text-30 {
+  color: rgba(0,0,0,0.3);
+}
+:root.dark .text-30 {
+  color: rgba(255,255,255,0.3);
+}
+.btn-plain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(0,0,0,0.75);
+  transition: color 0.15s ease, background-color 0.15s ease;
+  position: relative;
+}
+.btn-plain:hover {
+  color: var(--primary);
+  background-color: var(--btn-plain-bg-hover);
+}
+.btn-plain:active {
+  background-color: var(--btn-plain-bg-active);
+}
+:root.dark .btn-plain {
+  color: rgba(255,255,255,0.75);
+}
+:root.dark .btn-plain:hover {
+  color: var(--primary);
+}
+.btn-regular {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--btn-regular-bg);
+  border: none;
+  cursor: pointer;
+  color: var(--btn-content);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.btn-regular:hover {
+  background-color: var(--btn-regular-bg-hover);
+}
+.btn-regular:active {
+  background-color: var(--btn-regular-bg-active);
+}
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.hidden {
+  display: none !important;
+}
+.hide {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+.link {
+  color: var(--primary);
+  transition: color 0.15s ease;
+}
+.link:hover {
+  opacity: 0.8;
+}
+::selection {
+  background-color: var(--selection-bg);
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.5);
+}
+:root.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+}
+:root.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.5);
+}
+.onload-animation {
+  animation: onloadFadeIn 0.5s ease-out both;
+}
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+@-moz-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@-o-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@-moz-keyframes onloadFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@-webkit-keyframes onloadFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@-o-keyframes onloadFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes onloadFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@-moz-keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@-webkit-keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@-o-keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@-moz-keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@-webkit-keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@-o-keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

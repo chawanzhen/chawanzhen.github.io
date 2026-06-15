@@ -1,250 +1,461 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  
-  <title>Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:locale" content="en_US">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-  
+  <!-- ============================================ -->
+<!-- Chawan Theme - Head Partial -->
+<!-- ============================================ -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hexo">
+
+
+
+<title>茶碗蒸の博客</title>
+
+
+
+<meta property="og:title" content="茶碗蒸の博客">
+<meta property="og:url" content="/index.html">
+<meta property="og:site_name" content="茶碗蒸の博客">
+
+
+<meta name="twitter:title" content="茶碗蒸の博客">
+
+
+<link rel="icon" href="/images/favicon.ico">
+
+<!-- Theme CSS -->
 <link rel="stylesheet" href="/css/style.css">
 
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+<!-- Theme hue config -->
+<style>
+  :root {
+    --hue: 250;
+  }
+</style>
 
-  
-  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+<!-- Prevent flash of wrong theme -->
+<script>
+  (function() {
+    try {
+      var theme = localStorage.getItem('theme') || 'light';
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    } catch(e) {}
+  })();
+</script>
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+</head>
+<body class="min-h-screen is-home enable-banner glassmorphism">
+  <!-- Top row with navbar -->
+  <div id="top-row">
+    <div id="navbar-wrapper">
+      <!-- ============================================ -->
+<!-- Chawan Theme - Navbar Partial -->
+<!-- ============================================ -->
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
+
+<div id="navbar"
+     data-transparent-mode="semifull"
+     data-is-home="true">
+
+  <!-- Used for onload animation -->
+  <div style="position:absolute; height:2rem; left:0; right:0; top:-2rem; background:var(--card-bg); transition:background-color 0.15s;"></div>
+
+  <div>
+    <!-- Site Title -->
+    <a href="/" class="navbar-title">
       
+      
+        <img src="/images/home.png" alt="Logo">
+      
+      <span>茶碗蒸</span>
+    </a>
+
+    <!-- Nav Links (desktop) -->
+    <nav class="nav-links">
+      
+        <a href="/"
+           class="nav-link active">
+          首页
+        </a>
+      
+        <a href="/archives"
+           class="nav-link">
+          归档
+        </a>
+      
+        <a href="/about"
+           class="nav-link">
+          关于
+        </a>
+      
+    </nav>
+
+    <!-- Nav Actions -->
+    <div class="nav-actions">
+      <!-- Layout Switch -->
+      
+      <button class="nav-btn" id="layout-switch-btn" aria-label="Toggle layout" title="Toggle layout">
+        ⊞
+      </button>
+      
+
+      <!-- Theme Toggle -->
+      <button class="nav-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+        ☀
+      </button>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="nav-btn nav-link-mobile" id="mobile-menu-toggle" aria-label="Menu" style="display:none">
+        ☰
+      </button>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+  </div>
+</div>
+
+<!-- Mobile Menu Panel -->
+<div id="mobile-menu-panel" class="float-panel" style="display:none; position:fixed; top:4.5rem; left:0; right:0; z-index:200; margin:0.5rem; padding:0.75rem;">
+  
+    <a href="/"
+       style="display:block; padding:0.75rem 1rem; border-radius:0.5rem; font-size:1rem;"
+       class="nav-link">
+      首页
+    </a>
+  
+    <a href="/archives"
+       style="display:block; padding:0.75rem 1rem; border-radius:0.5rem; font-size:1rem;"
+       class="nav-link">
+      归档
+    </a>
+  
+    <a href="/about"
+       style="display:block; padding:0.75rem 1rem; border-radius:0.5rem; font-size:1rem;"
+       class="nav-link">
+      关于
+    </a>
+  
+</div>
+
+    </div>
+  </div>
+
+  <!-- Fullscreen wallpaper background -->
+  
+  <div id="wallpaper" aria-hidden="true">
+    
+      <div class="wallpaper-item active">
+        <img src="/images/banner/src/banner1.webp" alt="">
       </div>
-    </div>
+    
+      <div class="wallpaper-item ">
+        <img src="/images/banner/src/banner2.webp" alt="">
+      </div>
+    
+      <div class="wallpaper-item ">
+        <img src="/images/banner/src/banner3.webp" alt="">
+      </div>
+    
   </div>
-</header>
-
-      <div class="outer">
-        <section id="main">
   
-    <article id="post-my-first-post" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/06/15/my-first-post/" class="article-date">
-  <time class="dt-published" datetime="2026-06-15T03:03:03.000Z" itemprop="datePublished">2026-06-15</time>
-</a>
+
+  <!-- Banner (home page only or all pages) -->
+  <!-- ============================================ -->
+<!-- Chawan Theme - Banner Partial -->
+<!-- ============================================ -->
+
+
+
+<div id="banner-wrapper" class=""
+     style="top:0; background:linear-gradient(135deg, oklch(0.55 0.15 var(--hue)) 0%, oklch(0.45 0.12 var(--hue)) 50%, oklch(0.35 0.10 var(--hue)) 100%);">
+
+  
+  <!-- Carousel Mode -->
+  <div id="banner-carousel" data-interval="3"
+       style="position:relative; height:100%; width:100%;">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+      <div class="carousel-item active">
         
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/06/15/my-first-post/">my-first-post</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>这是第一篇博客<br>啊啊<del>测试环境</del><br>马猴卡都哈子动~</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2026/06/15/my-first-post/" data-id="cmqen2c7l00011gfb37xkauu2" data-title="my-first-post" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/06/15/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2026-06-15T02:58:35.198Z" itemprop="datePublished">2026-06-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/06/15/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2026/06/15/hello-world/" data-id="cmqen2c7j00001gfb5780avr0" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/06/">June 2026</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2026/06/15/my-first-post/">my-first-post</a>
-          </li>
-        
-          <li>
-            <a href="/2026/06/15/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
+        <img src="/images/banner/src/banner1.webp"
+             alt="Banner image 1"
+             style="object-fit:cover; object-position:top;">
         
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
+    
+      <div class="carousel-item ">
+        
+        <img src="/images/banner/src/banner2.webp"
+             alt="Banner image 2"
+             style="object-fit:cover; object-position:top;">
+        
+      </div>
+    
+      <div class="carousel-item ">
+        
+        <img src="/images/banner/src/banner3.webp"
+             alt="Banner image 3"
+             style="object-fit:cover; object-position:top;">
+        
+      </div>
+    
+    <!-- Dot indicators -->
+    <div class="carousel-dots">
       
-      &copy; 2026 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+      <button class="carousel-dot active"
+              aria-label="Slide 1"></button>
+      
+      <button class="carousel-dot "
+              aria-label="Slide 2"></button>
+      
+      <button class="carousel-dot "
+              aria-label="Slide 3"></button>
+      
     </div>
   </div>
-</footer>
+  
 
+  <!-- Home Text Overlay -->
+  
+
+  <!-- Water Waves -->
+  
+  <div id="header-waves">
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         viewBox="0 20 150 32" preserveAspectRatio="none" shape-rendering="auto"
+         style="transform:translateZ(0);">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v48h-352z"></path>
+      </defs>
+      <g class="parallax" style="transform:translateZ(0);">
+        <use xlink:href="#gentle-wave" x="48" y="0" style="opacity:0.25; fill:var(--page-bg); animation-delay:-2s; animation-duration:7s;"></use>
+        <use xlink:href="#gentle-wave" x="48" y="3" style="opacity:0.5;  fill:var(--page-bg); animation-delay:-3s; animation-duration:10s;"></use>
+        <use xlink:href="#gentle-wave" x="48" y="5" style="opacity:0.75; fill:var(--page-bg); animation-delay:-4s; animation-duration:13s;"></use>
+        <use xlink:href="#gentle-wave" x="48" y="7" style="fill:var(--page-bg); animation-delay:-5s; animation-duration:20s;"></use>
+      </g>
+    </svg>
+  </div>
+  
+
+</div>
+
+
+
+  <!-- Main content area -->
+  <div id="main-panel" style="position:relative; z-index:30; max-width:var(--page-width); margin:0 auto; padding:0 1rem;">
+    <div id="main-grid" class="">
+
+      
+      <!-- Sidebar -->
+      <aside id="sidebar">
+        <div id="sidebar-sticky">
+          <!-- ============================================ -->
+<!-- Chawan Theme - Sidebar Partial -->
+<!-- ============================================ -->
+
+
+
+<!-- Profile Card -->
+<div class="card-base profile-card onload-animation">
+  <a href="/about/" class="profile-avatar">
+    <img src="/images/avatar.webp" alt="Avatar">
+  </a>
+  <div class="profile-name">茶碗蒸是饮料</div>
+  <div class="profile-divider"></div>
+  <div class="profile-bio">记录技术，分享生活</div>
+
+  <!-- Stats Row -->
+  <div class="profile-stats">
+    <div class="profile-stat-item">
+      <span class="profile-stat-num">1</span>
+      <span class="profile-stat-label">文章 <span class="label-en">Posts</span></span>
     </div>
-    <nav id="mobile-nav">
+    <div class="profile-stat-item">
+      <span class="profile-stat-num">1</span>
+      <span class="profile-stat-label">分类 <span class="label-en">Cat.</span></span>
+    </div>
+    <div class="profile-stat-item">
+      <span class="profile-stat-num">3</span>
+      <span class="profile-stat-label">标签 <span class="label-en">Tags</span></span>
+    </div>
+  </div>
+
   
-    <a href="/" class="mobile-nav-link">Home</a>
+  <div class="profile-socials">
+    
+      <a href="https://github.com/chawanzhen/" target="_blank" rel="noopener" class="profile-social-link" title="github">
+        G
+      </a>
+    
+  </div>
   
-    <a href="/archives" class="mobile-nav-link">Archives</a>
+</div>
+
+
+
+<!-- Categories Widget -->
+<div class="card-base sidebar-widget onload-animation" style="animation-delay: calc(var(--content-delay) + 100ms);">
+  <div class="sidebar-widget-title">分类 <span class="widget-title-en">Categories</span></div>
   
-</nav>
+  <div class="category-list">
+    
+      <a href="/categories/eBPF/" class="category-item">
+        <span>eBPF</span>
+        <span class="category-count">1</span>
+      </a>
+    
+  </div>
+  
+</div>
+
+
+
+<!-- Tags Widget -->
+<div class="card-base sidebar-widget onload-animation" style="animation-delay: calc(var(--content-delay) + 200ms);">
+  <div class="sidebar-widget-title">标签 <span class="widget-title-en">Tags</span></div>
+  
+  <div class="tag-list">
+    
+      <a href="/tags/eBPF/" class="tag-badge" style="font-size:0.82rem;">
+        eBPF
+      </a>
+    
+      <a href="/tags/Linux/" class="tag-badge" style="font-size:0.82rem;">
+        Linux
+      </a>
+    
+      <a href="/tags/%E5%86%85%E6%A0%B8/" class="tag-badge" style="font-size:0.82rem;">
+        内核
+      </a>
+    
+  </div>
+  
+</div>
+
+
+        </div>
+      </aside>
+      
+
+      <!-- Main content -->
+      <main id="swup-container">
+        <div id="content-wrapper">
+          <!-- ============================================ -->
+<!-- Chawan Theme - Home Page -->
+<!-- ============================================ -->
+
+
+<div id="post-list-container"
+     class="list-mode"
+     data-default-layout="list">
+
+  
+    <!-- ============================================ -->
+<!-- Chawan Theme - Post Card Partial -->
+<!-- ============================================ -->
+
+
+<div class="post-card card-base onload-animation" style="animation-delay: calc(var(--content-delay) + 0ms);">
+  <div class="post-card-body">
+    <!-- Title -->
+    <a href="/2026/06/15/ebpf-intro/" class="post-card-title">
+      
+      eBPF 入门：在内核里跑沙盒程序是什么体验
+    </a>
+
+    <!-- Metadata -->
+    <div class="post-card-meta" style="margin-bottom:0.75rem;">
+      
+        <span>eBPF</span>
+        <span class="meta-divider">/</span>
+      
+      <span>2026-06-15</span>
+      
+    </div>
+
+    <!-- Description -->
     
 
+    <!-- Tags -->
+    
+    <div class="post-card-tags">
+      
+        <a href="/tags/eBPF/" class="tag-badge"># eBPF</a>
+      
+        <a href="/tags/Linux/" class="tag-badge"># Linux</a>
+      
+        <a href="/tags/%E5%86%85%E6%A0%B8/" class="tag-badge"># 内核</a>
+      
+    </div>
+    
+  </div>
 
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
+  <!-- Enter button -->
+  <a href="/2026/06/15/ebpf-intro/" class="post-card-enter" aria-label="Read more">
+    <span class="post-card-enter-icon">→</span>
+  </a>
+</div>
 
   
-<script src="/fancybox/jquery.fancybox.min.js"></script>
+</div>
 
 
 
-
-<script src="/js/script.js"></script>
-
+<!-- Pagination -->
 
 
+<!-- Stats Bar -->
 
+<div class="home-stats-row scroll-reveal">
+  <div class="stat-card card-base">
+    <span class="stat-number">1</span>
+    <span class="stat-label">文章 <span class="label-en">Articles</span></span>
+  </div>
+  <div class="stat-card card-base">
+    <span class="stat-number">1</span>
+    <span class="stat-label">分类 <span class="label-en">Categories</span></span>
+  </div>
+  <div class="stat-card card-base">
+    <span class="stat-number">3</span>
+    <span class="stat-label">标签 <span class="label-en">Tags</span></span>
+  </div>
+</div>
+
+
+<!-- Welcome Section -->
+
+<div class="home-welcome card-base scroll-reveal">
+  <div class="home-welcome-icon">👋</div>
+  <h2>你好，我是 茶碗蒸是饮料</h2>
+  <p class="home-welcome-bio">记录技术，分享生活</p>
+</div>
+
+
+        </div>
+      </main>
+    </div>
+
+    <!-- ============================================ -->
+<!-- Chawan Theme - Footer Partial -->
+<!-- ============================================ -->
+
+
+<div class="footer-divider"></div>
+<div class="footer-content">
+  &copy; 2026 茶碗蒸是饮料. 保留所有权利.<br>
+  由 <a class="link" href="https://hexo.io" target="_blank">Hexo</a> &
+  <a class="link" href="#" target="_blank">Chawan</a> 驱动
+</div>
 
   </div>
+
+  <!-- Back to top -->
+  <button id="back-to-top" class="hide" aria-label="Back to top" title="Back to top">
+    ↑
+  </button>
+
+  <!-- Theme JavaScript -->
+<script src="/js/main.js"></script>
+
 </body>
 </html>

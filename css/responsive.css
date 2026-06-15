@@ -1,0 +1,122 @@
+@media (max-width: 1023px) {
+  #main-grid {
+    grid-template-columns: 1fr;
+  }
+  #sidebar {
+    display: none;
+  }
+  #banner-wrapper {
+    height: 70vh;
+    min-height: 450px;
+  }
+  body.is-home.enable-banner #main-panel {
+    margin-top: calc(70vh - 2rem);
+  }
+  #banner img {
+    object-position: center center;
+  }
+  .banner-title {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+  }
+  .banner-subtitle {
+    font-size: clamp(0.875rem, 2vw, 1.125rem);
+  }
+  .banner-text-overlay > div {
+    width: 90%;
+  }
+  #header-waves {
+    height: 10vh;
+    min-height: 60px;
+    max-height: 100px;
+  }
+  #navbar > div {
+    padding: 0 0.5rem;
+  }
+  .nav-links {
+    display: none;
+  }
+  .nav-link-mobile {
+    display: block;
+  }
+  .post-card-body {
+    padding: 1.25rem 1rem 1rem;
+  }
+  .post-card-title {
+    font-size: 1.25rem;
+  }
+  .post-card-enter {
+    display: none;
+  }
+  .article-container {
+    padding: 1rem;
+  }
+  .article-title {
+    font-size: 1.5rem;
+  }
+  .profile-avatar {
+    max-width: 8rem;
+  }
+}
+@media (max-width: 480px) {
+  #banner-wrapper {
+    height: 60vh;
+    min-height: 350px;
+  }
+  body.is-home.enable-banner #main-panel {
+    margin-top: calc(60vh - 1.5rem);
+  }
+  .banner-title {
+    font-size: 2rem;
+  }
+  .banner-subtitle {
+    font-size: 0.875rem;
+  }
+  .banner-text-overlay > div {
+    width: 95%;
+  }
+  #header-waves {
+    height: 8vh;
+    min-height: 50px;
+    max-height: 70px;
+  }
+  #navbar > div {
+    height: 3.5rem;
+  }
+  #back-to-top {
+    bottom: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  #main-grid {
+    grid-template-columns: 17.5rem 1fr;
+  }
+  #main-grid.sidebar-right {
+    grid-template-columns: 1fr 17.5rem;
+  }
+  .nav-link-mobile {
+    display: none;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+  }
+  :root.dark {
+    color-scheme: dark;
+  }
+}
+@media (max-width: 1023px) and (orientation: landscape) {
+  #banner-wrapper {
+    height: 60vh;
+    min-height: 300px;
+  }
+  .banner-title {
+    font-size: 2rem;
+  }
+  .banner-subtitle {
+    font-size: 0.875rem;
+  }
+}
