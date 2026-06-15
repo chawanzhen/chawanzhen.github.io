@@ -742,6 +742,14 @@ body:not(.enable-banner) #main-panel {
 .nav-link.active {
   color: var(--primary);
 }
+#mobile-menu-panel {
+  border-radius: var(--radius-large);
+  background-color: var(--card-bg);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+:root.dark #mobile-menu-panel {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
 .nav-actions {
   display: flex;
   align-items: center;

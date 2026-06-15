@@ -448,6 +448,26 @@
     isMobile.addEventListener('change', setupMobile);
   }
 
+  // ========== Mobile Menu Toggle ==========
+  function initMobileMenu() {
+    var toggle = document.getElementById('mobile-menu-toggle');
+    var panel = document.getElementById('mobile-menu-panel');
+    if (!toggle || !panel) return;
+
+    toggle.addEventListener('click', function() {
+      var isOpen = panel.style.display === 'block';
+      panel.style.display = isOpen ? 'none' : 'block';
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+      if (panel.style.display !== 'block') return;
+      if (!panel.contains(e.target) && e.target !== toggle) {
+        panel.style.display = 'none';
+      }
+    });
+  }
+
   // ========== Init on Load ==========
   function init() {
     // Load saved theme
@@ -464,6 +484,7 @@
     initLayoutSwitch();
     initScrollReveal();
     initMobileSidebar();
+    initMobileMenu();
 
     // Theme toggle button
     var themeToggle = document.getElementById('theme-toggle');
