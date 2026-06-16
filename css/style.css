@@ -1825,6 +1825,11 @@ body:not(.is-home) #banner-wrapper {
 .post-nav-item:hover .post-nav-title {
   color: var(--primary);
 }
+.post-comments {
+  max-width: 48rem;
+  margin: 2rem auto 0;
+  padding: 1.5rem;
+}
 .recent-posts-section {
   max-width: 48rem;
   margin: 2rem auto 0;

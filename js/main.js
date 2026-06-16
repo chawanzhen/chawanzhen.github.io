@@ -28,6 +28,17 @@
     try {
       localStorage.setItem('theme', theme);
     } catch (e) {}
+    // Sync Giscus comment theme
+    sendGiscusTheme(theme);
+  }
+
+  function sendGiscusTheme(theme) {
+    var iframe = document.querySelector('iframe.giscus-frame');
+    if (!iframe) return;
+    var giscusTheme = theme === DARK_MODE ? 'transparent_dark' : 'light';
+    iframe.contentWindow.postMessage({
+      giscus: { setConfig: { theme: giscusTheme } }
+    }, 'https://giscus.app');
   }
 
   function toggleTheme() {
