@@ -379,13 +379,17 @@
 
 
 
+<div class="toc-inline card-base" style="margin-bottom:2rem; padding:1rem;">
+  <div class="toc-title">目录 <span class="widget-title-en">TOC</span></div>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#eBPF%E7%8E%AF%E5%A2%83%E6%90%AD%E9%85%8D%E4%B8%8E%E5%87%86%E5%A4%87"><span class="toc-text">eBPF环境搭配与准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%86%85%E6%A0%B8%E4%BF%A1%E6%81%AF"><span class="toc-text">获取内核信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%B0%9D%E8%AF%95"><span class="toc-text">初尝试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E7%8E%AF%E8%8A%82"><span class="toc-text">验证环节</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%BE%E5%A3%B0"><span class="toc-text">尾声</span></a></li></ol>
+</div>
+
 
   
 
   <!-- Content -->
   <div class="article-content">
-    <p>##eBPF环境搭配与准备</p>
-<p>想要使用eBPF，环境的准备是必不可少的，这里我们以Ubuntu为例，来看看如何通过命令行下载</p>
+    <h2 id="eBPF环境搭配与准备"><a href="#eBPF环境搭配与准备" class="headerlink" title="eBPF环境搭配与准备"></a>eBPF环境搭配与准备</h2><p>想要使用eBPF，环境的准备是必不可少的，这里我们以Ubuntu为例，来看看如何通过命令行下载</p>
 <p>首先是bpftool工具的安装，如果你是Ubuntu22.04版本及以上，试试下面这段命令行：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install linux-tools-generic</span><br></pre></td></tr></table></figure>
 
@@ -399,12 +403,10 @@
 <div class="callout callout-warning"><div class="callout-title">⚠️ wsl环境注意</div><div class="callout-body"><p>对了，如果你正在使用wsl环境，是没有办法通过apt来安装使用bpftool的，只能从源码来编译使用了；</p>
 </div></div>
 
-<p>##获取内核信息</p>
-<p>让我们先获得至关重要的一个头文件：vmlinux.h<br>在你想进行eBPF尝试的文件中：</p>
+<h2 id="获取内核信息"><a href="#获取内核信息" class="headerlink" title="获取内核信息"></a>获取内核信息</h2><p>让我们先获得至关重要的一个头文件：vmlinux.h<br>在你想进行eBPF尝试的文件中：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bpftool btf dump file /sys/kernel/btf/vmlinux format c &gt; vmlinux.h</span><br></pre></td></tr></table></figure>
 <p>来获取内核信息</p>
-<p>##初尝试</p>
-<p>终于到万众瞩目的敲代码环节了，首先让我们先创建一个.c文件</p>
+<h2 id="初尝试"><a href="#初尝试" class="headerlink" title="初尝试"></a>初尝试</h2><p>终于到万众瞩目的敲代码环节了，首先让我们先创建一个.c文件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">touch</span> kernel.c</span><br></pre></td></tr></table></figure>
 <p>好了，接下来用你喜欢的ide打开它吧，笔记本也是ok的</p>
 <p>事不宜迟</p>
@@ -416,8 +418,7 @@
 <div class="callout callout-tip"><div class="callout-title">💡 TIP</div><div class="callout-body"><p><code>autoattach</code> 会自动识别 <code>tracepoint</code> 类型并完成挂载，比 LSM 省事多了——不用手动指定 type，也不用单独写 loader。</p>
 </div></div>
 
-<p>##验证环节</p>
-<p>加载成功后，先看一眼当前的计数器：</p>
+<h2 id="验证环节"><a href="#验证环节" class="headerlink" title="验证环节"></a>验证环节</h2><p>加载成功后，先看一眼当前的计数器：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> bpftool map dump name counter</span><br></pre></td></tr></table></figure>
 <p>你会看到类似 <code>[&#123;key: 0, value: 562&#125;]</code> 的输出，表示内核已经打开过 562 个文件了。</p>
 <p>然后随便做点操作触发它：</p>
@@ -429,7 +430,7 @@
 <p>最后别忘了清理加载的程序哦</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> /sys/fs/bpf/test_open</span><br></pre></td></tr></table></figure>
 
-<p>##尾声<br>这个章节，配置了环境，并实现了第一个eBPF程序，用 tracepoint 钩住了文件打开的瞬间，你已经完成了从 0 到 1 的关键一步；最后，感谢你的观看，下一章更精彩~</p>
+<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>这个章节，配置了环境，并实现了第一个eBPF程序，用 tracepoint 钩住了文件打开的瞬间，你已经完成了从 0 到 1 的关键一步；最后，感谢你的观看，下一章更精彩~</p>
 
   </div>
 
@@ -446,7 +447,7 @@
       </a>
       <!-- Post stats -->
       <div class="post-footer-stats">
-        <span>📝 1778 字</span>
+        <span>📝 1768 字</span>
         <span>📖 4 分钟</span>
         
         <span>📁 <a href="/categories/eBPF/" class="link">eBPF</a></span>
