@@ -26,8 +26,10 @@
   --inline-code-bg: var(--btn-regular-bg);
   --inline-code-color: var(--btn-content);
   --selection-bg: oklch(0.9 0.05 var(--hue));
-  --codeblock-bg: oklch(0.17 0.015 var(--hue));
-  --codeblock-topbar-bg: oklch(0.3 0.02 var(--hue));
+  --codeblock-bg: oklch(0.32 0.015 var(--hue));
+  --codeblock-topbar-bg: oklch(0.28 0.01 var(--hue));
+  --codeblock-glass-bg: rgba(30,30,35,0.55);
+  --codeblock-glass-border: rgba(255,255,255,0.06);
   --link-underline: oklch(0.93 0.04 var(--hue));
   --link-hover: oklch(0.95 0.025 var(--hue));
   --link-active: oklch(0.9 0.05 var(--hue));
@@ -58,6 +60,8 @@
   --selection-bg: oklch(0.4 0.08 var(--hue));
   --codeblock-bg: oklch(0.17 0.015 var(--hue));
   --codeblock-topbar-bg: oklch(0.12 0.015 var(--hue));
+  --codeblock-glass-bg: rgba(13,13,17,0.78);
+  --codeblock-glass-border: rgba(255,255,255,0.03);
   --link-underline: oklch(0.4 0.08 var(--hue));
   --link-hover: oklch(0.4 0.08 var(--hue));
   --link-active: oklch(0.35 0.07 var(--hue));
@@ -1230,10 +1234,79 @@ body:not(.enable-banner) #main-panel {
 .article-content blockquote p:last-child {
   margin-bottom: 0;
 }
-.article-content hr {
-  border: none;
-  border-top: 1px dashed var(--line-divider);
-  margin: 2rem 0;
+.article-content .callout {
+  margin: 1.25rem 0;
+  padding: 1rem 1.125rem;
+  border-radius: var(--radius-large);
+  border-left: 4px solid;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+.article-content .callout .callout-title {
+  font-weight: 700;
+  font-size: 0.875rem;
+  margin-bottom: 0.375rem;
+  letter-spacing: 0.03em;
+}
+.article-content .callout .callout-body p:first-child {
+  margin-top: 0;
+}
+.article-content .callout .callout-body p:last-child {
+  margin-bottom: 0;
+}
+.article-content .callout.callout-tip {
+  border-color: oklch(0.55 0.16 155);
+  background: oklch(0.97 0.02 155);
+}
+:root.dark .article-content .callout.callout-tip {
+  background: oklch(0.22 0.03 155);
+  border-color: oklch(0.65 0.16 155);
+}
+.article-content .callout.callout-note {
+  border-color: oklch(0.55 0.14 250);
+  background: oklch(0.97 0.02 250);
+}
+:root.dark .article-content .callout.callout-note {
+  background: oklch(0.22 0.03 250);
+  border-color: oklch(0.65 0.14 250);
+}
+.article-content .callout.callout-warning {
+  border-color: oklch(0.55 0.17 85);
+  background: oklch(0.97 0.03 85);
+}
+:root.dark .article-content .callout.callout-warning {
+  background: oklch(0.22 0.04 85);
+  border-color: oklch(0.7 0.17 85);
+}
+.article-content .callout.callout-danger {
+  border-color: oklch(0.5 0.19 25);
+  background: oklch(0.97 0.02 25);
+}
+:root.dark .article-content .callout.callout-danger {
+  background: oklch(0.22 0.03 25);
+  border-color: oklch(0.62 0.19 25);
+}
+.article-content mark {
+  background: oklch(0.92 0.1 95);
+  color: inherit;
+  padding: 0.1em 0.25em;
+  border-radius: 0.2em;
+}
+:root.dark .article-content mark {
+  background: oklch(0.35 0.08 95);
+}
+.article-content kbd {
+  display: inline-block;
+  padding: 0.15em 0.45em;
+  font-size: 0.8125em;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+  line-height: 1.5;
+  color: var(--btn-content);
+  background-color: var(--btn-regular-bg);
+  border: 1px solid var(--line-divider);
+  border-radius: 0.3em;
+  box-shadow: 0 1px 0 var(--line-color);
+  vertical-align: 0.1em;
 }
 .article-content table {
   width: 100%;
@@ -1279,11 +1352,12 @@ pre {
   border-radius: var(--radius-large);
   overflow-x: auto;
   margin: 1rem 0;
-  background-color: oklch(0.17 0.015 var(--hue));
+  background-color: var(--codeblock-bg);
   padding: 1rem;
   font-size: 0.875rem;
   line-height: 1.6;
   color: #e6edf3;
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
 }
 pre code {
   background: none;
@@ -1291,13 +1365,38 @@ pre code {
   color: inherit;
   font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
 }
+body.glassmorphism pre {
+  background-color: var(--codeblock-glass-bg);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid var(--codeblock-glass-border);
+}
 figure.highlight {
   border-radius: var(--radius-large);
   overflow: hidden;
   margin: 1rem 0;
   font-size: 0.875rem;
   line-height: 1.6;
-  background: oklch(0.17 0.015 var(--hue));
+  background: transparent;
+  position: relative;
+}
+figure.highlight[data-lang]::after {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+  color: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.06);
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  pointer-events: none;
+  z-index: 2;
 }
 figure.highlight table {
   width: 100%;
@@ -1306,16 +1405,17 @@ figure.highlight table {
   overflow-x: auto;
 }
 figure.highlight .gutter {
-  background: oklch(0.2 0.01 var(--hue));
-  color: rgba(255,255,255,0.3);
+  background: transparent;
+  color: rgba(0,0,0,0.25);
   user-select: none;
 }
 figure.highlight .gutter pre {
   margin: 0;
   padding: 1rem 0.75rem;
-  background: none;
+  background: transparent;
   border-radius: 0;
   font-size: 0.8125rem;
+  color: inherit;
 }
 figure.highlight .code {
   width: 100%;
@@ -1323,10 +1423,27 @@ figure.highlight .code {
 figure.highlight .code pre {
   margin: 0;
   padding: 1rem 1.25rem;
-  background: none;
-  border-radius: 0;
+  background: var(--codeblock-bg);
+  border-radius: var(--radius-large) 0;
   font-size: 0.875rem;
   color: #e6edf3;
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
+}
+:root.dark figure.highlight .gutter {
+  color: rgba(255,255,255,0.2);
+}
+:root.dark figure.highlight[data-lang]::after {
+  color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.06);
+}
+body.glassmorphism figure.highlight .code pre {
+  background: var(--codeblock-glass-bg);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid var(--codeblock-glass-border);
+}
+body.glassmorphism figure.highlight .gutter {
+  background: transparent;
 }
 figure.highlight .comment,
 figure.highlight .quote {

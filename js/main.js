@@ -468,6 +468,20 @@
     });
   }
 
+  // ========== Code Block Language Badge ==========
+  function initCodeBlockBadges() {
+    var blocks = document.querySelectorAll('figure.highlight');
+    for (var i = 0; i < blocks.length; i++) {
+      var cls = blocks[i].classList;
+      for (var j = 0; j < cls.length; j++) {
+        if (cls[j] !== 'highlight') {
+          blocks[i].setAttribute('data-lang', cls[j]);
+          break;
+        }
+      }
+    }
+  }
+
   // ========== Init on Load ==========
   function init() {
     // Load saved theme
@@ -485,6 +499,7 @@
     initScrollReveal();
     initMobileSidebar();
     initMobileMenu();
+    initCodeBlockBadges();
 
     // Theme toggle button
     var themeToggle = document.getElementById('theme-toggle');
