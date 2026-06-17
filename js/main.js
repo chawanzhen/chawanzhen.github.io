@@ -30,6 +30,14 @@
     } catch (e) {}
     // Sync Giscus comment theme
     sendGiscusTheme(theme);
+    // Switch visual effects
+    if (theme === DARK_MODE) {
+      stopSakura();
+      startMeteor();
+    } else {
+      stopMeteor();
+      startSakura();
+    }
   }
 
   function sendGiscusTheme(theme) {
@@ -46,6 +54,248 @@
       ? DARK_MODE
       : LIGHT_MODE;
     setTheme(current === DARK_MODE ? LIGHT_MODE : DARK_MODE);
+  }
+
+  // ========== Sakura (Cherry Blossom) Effect - Light Mode ==========
+  var sakuraCanvas = null;
+  var sakuraCtx = null;
+  var sakuraPetals = [];
+  var sakuraAnimId = null;
+  var sakuraSpawnId = null;
+  var sakuraRunning = false;
+  var sakuraColors = ['#ffb7c5', '#ffc0cb', '#fcc2d0', '#ffaabb', '#f8b5c0'];
+
+  function initSakuraCanvas() {
+    if (sakuraCanvas) return;
+    sakuraCanvas = document.createElement('canvas');
+    sakuraCanvas.id = 'sakura-canvas';
+    document.body.appendChild(sakuraCanvas);
+    sakuraCtx = sakuraCanvas.getContext('2d');
+    resizeSakura();
+    window.addEventListener('resize', resizeSakura);
+  }
+
+  function resizeSakura() {
+    if (!sakuraCanvas) return;
+    sakuraCanvas.width = window.innerWidth;
+    sakuraCanvas.height = window.innerHeight;
+  }
+
+  function createPetal() {
+    return {
+      x: Math.random() * window.innerWidth,
+      y: -30,
+      size: 10 + Math.random() * 12,
+      speed: 0.3 + Math.random() * 0.7,
+      swayAmp: 0.3 + Math.random() * 0.7,
+      swayFreq: 0.008 + Math.random() * 0.015,
+      swayPhase: Math.random() * Math.PI * 2,
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.015,
+      opacity: 0.45 + Math.random() * 0.4,
+      color: sakuraColors[Math.floor(Math.random() * sakuraColors.length)]
+    };
+  }
+
+  function drawPetal(ctx, p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.globalAlpha = p.opacity;
+
+    // Main petal shape
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, p.size * 0.45, p.size * 0.22, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Darker center crease
+    ctx.fillStyle = 'rgba(220, 120, 140, 0.35)';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, p.size * 0.12, p.size * 0.22, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function updatePetal(p) {
+    p.y += p.speed;
+    p.x += Math.sin(p.swayPhase + p.y * p.swayFreq) * p.swayAmp;
+    p.rotation += p.rotSpeed;
+  }
+
+  function animateSakura() {
+    if (!sakuraRunning) return;
+    sakuraCtx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
+
+    for (var i = sakuraPetals.length - 1; i >= 0; i--) {
+      var p = sakuraPetals[i];
+      updatePetal(p);
+      drawPetal(sakuraCtx, p);
+      if (p.y > window.innerHeight + 40) {
+        sakuraPetals.splice(i, 1);
+      }
+    }
+    sakuraAnimId = requestAnimationFrame(animateSakura);
+  }
+
+  function startSakura() {
+    if (sakuraRunning) return;
+    initSakuraCanvas();
+    resizeSakura();
+    sakuraRunning = true;
+
+    // Scatter initial petals across the screen
+    for (var i = 0; i < 18; i++) {
+      var p = createPetal();
+      p.y = Math.random() * window.innerHeight;
+      sakuraPetals.push(p);
+    }
+
+    sakuraSpawnId = setInterval(function () {
+      if (sakuraPetals.length < 30) {
+        sakuraPetals.push(createPetal());
+      }
+    }, 250);
+
+    animateSakura();
+  }
+
+  function stopSakura() {
+    sakuraRunning = false;
+    if (sakuraAnimId) { cancelAnimationFrame(sakuraAnimId); sakuraAnimId = null; }
+    if (sakuraSpawnId) { clearInterval(sakuraSpawnId); sakuraSpawnId = null; }
+    sakuraPetals.length = 0;
+    if (sakuraCtx) sakuraCtx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
+  }
+
+  // ========== Meteor (Shooting Star) Effect - Dark Mode ==========
+  var meteorCanvas = null;
+  var meteorCtx = null;
+  var meteors = [];
+  var meteorAnimId = null;
+  var meteorTimerId = null;
+  var meteorRunning = false;
+
+  function initMeteorCanvas() {
+    if (meteorCanvas) return;
+    meteorCanvas = document.createElement('canvas');
+    meteorCanvas.id = 'meteor-canvas';
+    document.body.appendChild(meteorCanvas);
+    meteorCtx = meteorCanvas.getContext('2d');
+    resizeMeteor();
+    window.addEventListener('resize', resizeMeteor);
+  }
+
+  function resizeMeteor() {
+    if (!meteorCanvas) return;
+    meteorCanvas.width = window.innerWidth;
+    meteorCanvas.height = window.innerHeight;
+  }
+
+  function createMeteor() {
+    var angle = Math.PI * 0.22 + Math.random() * Math.PI * 0.38;
+    return {
+      x: window.innerWidth * (0.2 + Math.random() * 0.75),
+      y: Math.random() * window.innerHeight * 0.08,
+      length: 200 + Math.random() * 280,
+      speed: 8 + Math.random() * 14,
+      angle: angle,
+      life: 1
+    };
+  }
+
+  function drawMeteor(ctx, m) {
+    var a = m.life;
+    var hx = m.x;
+    var hy = m.y;
+    var tx = hx + Math.cos(m.angle) * m.length;
+    var ty = hy - Math.sin(m.angle) * m.length;
+
+    // Subtle glow — only around the front 25% of the trail, tight
+    var glowLen = m.length * 0.25;
+    var glowTx = hx + Math.cos(m.angle) * glowLen;
+    var glowTy = hy - Math.sin(m.angle) * glowLen;
+    var glowGrad = ctx.createLinearGradient(hx, hy, glowTx, glowTy);
+    glowGrad.addColorStop(0, 'rgba(255, 255, 255, ' + (a * 0.25) + ')');
+    glowGrad.addColorStop(0.6, 'rgba(255, 255, 255, ' + (a * 0.08) + ')');
+    glowGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+    ctx.beginPath();
+    ctx.moveTo(hx, hy);
+    ctx.lineTo(glowTx, glowTy);
+    ctx.strokeStyle = glowGrad;
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Core line — thin, bright near head, long gentle fade
+    var coreGrad = ctx.createLinearGradient(hx, hy, tx, ty);
+    coreGrad.addColorStop(0, 'rgba(255, 255, 255, ' + (a * 0.7) + ')');
+    coreGrad.addColorStop(0.04, 'rgba(255, 255, 255, ' + a + ')');
+    coreGrad.addColorStop(0.12, 'rgba(255, 255, 255, ' + (a * 0.6) + ')');
+    coreGrad.addColorStop(0.35, 'rgba(255, 255, 255, ' + (a * 0.18) + ')');
+    coreGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+    ctx.beginPath();
+    ctx.moveTo(hx, hy);
+    ctx.lineTo(tx, ty);
+    ctx.strokeStyle = coreGrad;
+    ctx.lineWidth = 1.2;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Tiny bright point at the tip
+    ctx.beginPath();
+    ctx.arc(hx, hy, 0.8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, ' + (a * 0.9) + ')';
+    ctx.fill();
+  }
+
+  function animateMeteor() {
+    if (!meteorRunning) return;
+    meteorCtx.clearRect(0, 0, meteorCanvas.width, meteorCanvas.height);
+
+    for (var i = meteors.length - 1; i >= 0; i--) {
+      var m = meteors[i];
+      m.x -= Math.cos(m.angle) * m.speed;
+      m.y += Math.sin(m.angle) * m.speed;
+      m.life -= 0.004;
+      if (m.life <= 0 || m.y > window.innerHeight + 80 || m.x < -80) {
+        meteors.splice(i, 1);
+      } else {
+        drawMeteor(meteorCtx, m);
+      }
+    }
+    meteorAnimId = requestAnimationFrame(animateMeteor);
+  }
+
+  function scheduleMeteor() {
+    if (!meteorRunning) return;
+    var delay = 800 + Math.random() * 3500;
+    meteorTimerId = setTimeout(function () {
+      if (!meteorRunning) return;
+      meteors.push(createMeteor());
+      scheduleMeteor();
+    }, delay);
+  }
+
+  function startMeteor() {
+    if (meteorRunning) return;
+    initMeteorCanvas();
+    resizeMeteor();
+    meteorRunning = true;
+    meteors.push(createMeteor());
+    scheduleMeteor();
+    animateMeteor();
+  }
+
+  function stopMeteor() {
+    meteorRunning = false;
+    if (meteorAnimId) { cancelAnimationFrame(meteorAnimId); meteorAnimId = null; }
+    if (meteorTimerId) { clearTimeout(meteorTimerId); meteorTimerId = null; }
+    meteors.length = 0;
+    if (meteorCtx) meteorCtx.clearRect(0, 0, meteorCanvas.width, meteorCanvas.height);
   }
 
   // ========== Wallpaper Carousel ==========
