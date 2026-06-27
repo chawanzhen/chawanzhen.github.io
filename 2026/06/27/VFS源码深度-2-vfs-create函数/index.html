@@ -10,16 +10,16 @@
 
 
 
-<title>每日一题2026-06-17 - 茶碗蒸の博客</title>
+<title>VFS源码深度-2.vfs_create函数 - 茶碗蒸の博客</title>
 
 
 
-<meta property="og:title" content="每日一题2026-06-17 - 茶碗蒸の博客">
-<meta property="og:url" content="/2026/06/17/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%982026-06-17/">
+<meta property="og:title" content="VFS源码深度-2.vfs_create函数 - 茶碗蒸の博客">
+<meta property="og:url" content="/2026/06/27/VFS%E6%BA%90%E7%A0%81%E6%B7%B1%E5%BA%A6-2-vfs-create%E5%87%BD%E6%95%B0/">
 <meta property="og:site_name" content="茶碗蒸の博客">
 
 
-<meta name="twitter:title" content="每日一题2026-06-17 - 茶碗蒸の博客">
+<meta name="twitter:title" content="VFS源码深度-2.vfs_create函数 - 茶碗蒸の博客">
 
 
 <link rel="icon" href="/images/favicon.ico">
@@ -378,16 +378,16 @@
 <article class="article-container">
   <!-- Header -->
   <header class="article-header">
-    <h1 class="article-title">每日一题2026-06-17</h1>
+    <h1 class="article-title">VFS源码深度-2.vfs_create函数</h1>
 
     <div class="article-meta">
       
         <span class="article-meta-item">
-          📁 <a href="/categories/leetcode/" class="link">leetcode</a>
+          📁 <a href="/categories/eBPF/" class="link">eBPF</a>
         </span>
       
-      <span class="article-meta-item">📅 2026-06-17</span>
-      <span class="article-meta-item">📖 4 分钟</span>
+      <span class="article-meta-item">📅 2026-06-27</span>
+      <span class="article-meta-item">📖 3 分钟</span>
       
     </div>
 
@@ -395,11 +395,9 @@
     
     <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
       
-        <a href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" class="tag-badge"># 每日一题</a>
+        <a href="/tags/eBPF/" class="tag-badge"># eBPF</a>
       
-        <a href="/tags/%E9%80%86%E5%90%91/" class="tag-badge"># 逆向</a>
-      
-        <a href="/tags/%E9%80%92%E5%BD%92/" class="tag-badge"># 递归</a>
+        <a href="/tags/Linux/" class="tag-badge"># Linux</a>
       
     </div>
     
@@ -415,7 +413,7 @@
 
 <div class="toc-inline card-base" style="margin-bottom:2rem; padding:1rem;">
   <div class="toc-title">目录 <span class="widget-title-en">TOC</span></div>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE"><span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF1"><span class="toc-text">思路1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%811"><span class="toc-text">代码1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF2"><span class="toc-text">思路2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%812"><span class="toc-text">代码2</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vfs-create-%E5%8F%82%E6%95%B0"><span class="toc-text">vfs_create 参数</span></a></li></ol>
 </div>
 
 
@@ -423,33 +421,13 @@
 
   <!-- Content -->
   <div class="article-content">
-    <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>让我们看看今天的每日一题题目：</p>
-<p><img src="/images/leetcode/2026-06-17.png" alt="题目"></p>
-<p>和昨天的题目几乎一模一样哎，不过这次要求返回从0开始的第k个字符，超过下标的则返回’.’</p>
-<h2 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h2><p>好像又是模拟？让我们看看数据范围，k的范围是0-1e15,s的范围是0-1e5，看来普通的模拟肯定是走不通了</p>
-<p>先考虑时间复杂度，毕竟std::reverse的时间复杂度是O(n)，如果单纯的模拟，时间复杂度就会达到O(n^2),在1e5的情况下大概率过不了；</p>
-<p>那能不能不用反转呢？</p>
-<p>比如用一个bool变量来记录当前是否反转了？如果是，则添加的时候在std::string前添加</p>
-<p>但是这样又有一个新问题，如果反转后删除头部则成了O(n)；这个思路看来不行；</p>
-<p>那既然正面想不通，不如逆向思维看看什么情况：</p>
-<p>在s中，遇到*，size会+1，遇到#，size会乘以2，那我们是不是可以先通过size大小来看k会不会超过索引下标范围</p>
-<h2 id="代码1"><a href="#代码1" class="headerlink" title="代码1"></a>代码1</h2><p>如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">char</span> <span class="title">processStr</span><span class="params">(string s, <span class="type">long</span> <span class="type">long</span> k)</span> </span>&#123;</span><br><span class="line">	<span class="type">int</span> n = s.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">long</span> <span class="type">long</span> sz = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">char</span>&amp; c:s)&#123;</span><br><span class="line">            	<span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>) sz = <span class="built_in">max</span>(sz<span class="number">-1</span>,<span class="number">0LL</span>);</span><br><span class="line">            	<span class="keyword">else</span> <span class="keyword">if</span>(c==<span class="string">&#x27;#&#x27;</span>) sz*=<span class="number">2</span>;</span><br><span class="line">            	<span class="keyword">else</span> <span class="keyword">if</span>(c==<span class="string">&#x27;%&#x27;</span>) <span class="keyword">continue</span>;</span><br><span class="line">            	<span class="keyword">else</span> sz++;</span><br><span class="line">        	&#125;</span><br><span class="line">        <span class="keyword">if</span>(k&gt;=sz) <span class="keyword">return</span> <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <h2 id="vfs-create-参数"><a href="#vfs-create-参数" class="headerlink" title="vfs_create 参数"></a>vfs_create 参数</h2><p>int vfs_create(struct mnt_idmap *idmap, struct inode *dir,<br>           struct dentry *dentry, umode_t mode, bool want_excl)</p>
+<p>首先是mnt_idmap，用于id映射，接着是常见的inode和dentry和文件类型 umode_t,最后是是否执行bool参数<br>这些结构体在1-常用结构读取已经介绍了</p>
+<p>##函数本身：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">vfs_create</span><span class="params">(<span class="keyword">struct</span> mnt_idmap *idmap, <span class="keyword">struct</span> inode *dir,</span></span><br><span class="line"><span class="params">	       <span class="keyword">struct</span> dentry *dentry, <span class="type">umode_t</span> mode, <span class="type">bool</span> want_excl)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> error;</span><br><span class="line"></span><br><span class="line">	error = may_create(idmap, dir, dentry);</span><br><span class="line">	<span class="keyword">if</span> (error)</span><br><span class="line">		<span class="keyword">return</span> error;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!dir-&gt;i_op-&gt;create)</span><br><span class="line">		<span class="keyword">return</span> -EACCES;	<span class="comment">/* shouldn&#x27;t it be ENOSYS? */</span></span><br><span class="line"></span><br><span class="line">	mode = vfs_prepare_mode(idmap, dir, mode, S_IALLUGO, S_IFREG);</span><br><span class="line">	error = security_inode_create(dir, dentry, mode);</span><br><span class="line">	<span class="keyword">if</span> (error)</span><br><span class="line">		<span class="keyword">return</span> error;</span><br><span class="line">	error = dir-&gt;i_op-&gt;create(idmap, dir, dentry, mode, want_excl);</span><br><span class="line">	<span class="keyword">if</span> (!error)</span><br><span class="line">		fsnotify_create(dir, dentry);</span><br><span class="line">	<span class="keyword">return</span> error;</span><br><span class="line">&#125;</span><br><span class="line">```c</span><br><span class="line"></span><br><span class="line">首先用<span class="type">int</span>定义一个错误标识error，接着执行may_create(idmap,dir,dentry),让我们进入到这个函数看看</span><br><span class="line"></span><br><span class="line">```c</span><br><span class="line"><span class="type">static</span> <span class="keyword">inline</span> <span class="type">int</span> <span class="title function_">may_create</span><span class="params">(<span class="keyword">struct</span> mnt_idmap *idmap,</span></span><br><span class="line"><span class="params">			     <span class="keyword">struct</span> inode *dir, <span class="keyword">struct</span> dentry *child)</span></span><br><span class="line">&#123;</span><br><span class="line">	audit_inode_child(dir, child, AUDIT_TYPE_CHILD_CREATE);</span><br><span class="line">	<span class="keyword">if</span> (child-&gt;d_inode)</span><br><span class="line">		<span class="keyword">return</span> -EEXIST;</span><br><span class="line">	<span class="keyword">if</span> (IS_DEADDIR(dir))</span><br><span class="line">		<span class="keyword">return</span> -ENOENT;</span><br><span class="line">	<span class="keyword">if</span> (!fsuidgid_has_mapping(dir-&gt;i_sb, idmap))</span><br><span class="line">		<span class="keyword">return</span> -EOVERFLOW;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> inode_permission(idmap, dir, MAY_WRITE | MAY_EXEC);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="思路2"><a href="#思路2" class="headerlink" title="思路2"></a>思路2</h2><p>但是单纯判断是不是超过索引范围没有作用啊？其实不然，接着往下看</p>
-<p>如果k&#x3D;&#x3D;sz-1，也就是答案刚好就是模拟完成后的最后一个字母，那我们之间返回它即可</p>
-<p>但是如何获得最后一个字母呢？难道模拟一遍吗？其实不然，获得这个字母的途径就这几种：</p>
-<p>1.s[n-1]为字母，也就是最后一步添加了字母，正好，它就是我们的答案；</p>
-<p>2.s[n-1]&#x3D;&#x3D;’#’,也就是说，它把自己复制了一遍，k所在位置的字母，等于前一步中：k-sz&#x2F;2地方所在位置的字母；</p>
-<p>3.s[n-1]&#x3D;&#x3D;’%’ 也就是说，它把自己反转了一遍，那么，k所在位置的字母，等于反转前sz-k-1所在地方的字母</p>
-<p>4.s[n-1] &#x3D;&#x3D; ‘*’ 也就是说，它删去了最后一个字母，那么，前一步的时候，sz &#x3D; sz+1；</p>
-<p>各种情况都分析清楚之后，我们现在的目的，就是找到k&#x3D;sz-1的那一步，于是有下面的代码：</p>
-<h2 id="代码2"><a href="#代码2" class="headerlink" title="代码2"></a>代码2</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">    <span class="type">char</span> c = s[i];</span><br><span class="line">    <span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>) sz++;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(c==<span class="string">&#x27;#&#x27;</span>)&#123;</span><br><span class="line">        sz/=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span>(k&gt;=sz) k-=sz;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(c==<span class="string">&#x27;%&#x27;</span>) k = sz-k<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        sz--;</span><br><span class="line">        <span class="keyword">if</span>(k==sz) <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="string">&#x27;.&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
-<p>两者结合起来便是最终的代码，运行，通过，不赖；</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">char</span> <span class="title">processStr</span><span class="params">(string s, <span class="type">long</span> <span class="type">long</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = s.<span class="built_in">size</span>();</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> sz = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">char</span>&amp; c:s)&#123;</span><br><span class="line">        <span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>) sz = <span class="built_in">max</span>(sz<span class="number">-1</span>,<span class="number">0LL</span>);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(c==<span class="string">&#x27;#&#x27;</span>) sz*=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(c==<span class="string">&#x27;%&#x27;</span>) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">else</span> sz++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(k&gt;=sz) <span class="keyword">return</span> <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">        <span class="type">char</span> c = s[i];</span><br><span class="line">        <span class="keyword">if</span>(c==<span class="string">&#x27;*&#x27;</span>) sz++;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(c==<span class="string">&#x27;#&#x27;</span>)&#123;</span><br><span class="line">            sz/=<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(k&gt;=sz) k-=sz;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(c==<span class="string">&#x27;%&#x27;</span>) k = sz-k<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            sz--;</span><br><span class="line">            <span class="keyword">if</span>(k==sz) <span class="keyword">return</span> c;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>今天的每日一题难度十分大，捣鼓很久才捣鼓出来，最后还是用到了逆向思维和递归才得以解决；那么，明天见~</p>
 
   </div>
 
@@ -466,10 +444,10 @@
       </a>
       <!-- Post stats -->
       <div class="post-footer-stats">
-        <span>📝 1871 字</span>
-        <span>📖 4 分钟</span>
+        <span>📝 1154 字</span>
+        <span>📖 3 分钟</span>
         
-        <span>📁 <a href="/categories/leetcode/" class="link">leetcode</a></span>
+        <span>📁 <a href="/categories/eBPF/" class="link">eBPF</a></span>
         
       </div>
     </div>
@@ -478,11 +456,9 @@
     
     <div class="post-footer-tags">
       
-        <a href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" class="tag-badge"># 每日一题</a>
+        <a href="/tags/eBPF/" class="tag-badge"># eBPF</a>
       
-        <a href="/tags/%E9%80%86%E5%90%91/" class="tag-badge"># 逆向</a>
-      
-        <a href="/tags/%E9%80%92%E5%BD%92/" class="tag-badge"># 递归</a>
+        <a href="/tags/Linux/" class="tag-badge"># Linux</a>
       
     </div>
     
@@ -496,16 +472,13 @@
   <!-- Prev / Next Navigation -->
   <nav class="post-nav scroll-reveal">
     
-      <a href="/2026/06/27/VFS%E6%BA%90%E7%A0%81%E6%B7%B1%E8%AF%BB-1-%E5%B8%B8%E7%94%A8%E7%BB%93%E6%9E%84%E8%AF%BB%E5%8F%96/" class="post-nav-item post-nav-prev card-base">
-        <span class="post-nav-label">← 上一篇</span>
-        <span class="post-nav-title">VFS源码深读-1.常用结构读取</span>
-      </a>
+      <div class="post-nav-item post-nav-placeholder"></div>
     
 
     
-      <a href="/2026/06/16/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%982026-06-16/" class="post-nav-item post-nav-next card-base">
+      <a href="/2026/06/27/VFS%E6%BA%90%E7%A0%81%E6%B7%B1%E8%AF%BB-1-%E5%B8%B8%E7%94%A8%E7%BB%93%E6%9E%84%E8%AF%BB%E5%8F%96/" class="post-nav-item post-nav-next card-base">
         <span class="post-nav-label">下一篇 →</span>
-        <span class="post-nav-title">每日一题2026-06-16</span>
+        <span class="post-nav-title">VFS源码深读-1.常用结构读取</span>
       </a>
     
   </nav>
@@ -535,14 +508,14 @@
     <div class="recent-posts-grid">
       
       
-        <a href="/2026/06/27/VFS%E6%BA%90%E7%A0%81%E6%B7%B1%E5%BA%A6-2-vfs-create%E5%87%BD%E6%95%B0/" class="recent-post-card card-base">
-          <span class="recent-post-title">VFS源码深度-2.vfs_create函数</span>
-          <span class="recent-post-date">2026-06-27</span>
-        </a>
-      
         <a href="/2026/06/27/VFS%E6%BA%90%E7%A0%81%E6%B7%B1%E8%AF%BB-1-%E5%B8%B8%E7%94%A8%E7%BB%93%E6%9E%84%E8%AF%BB%E5%8F%96/" class="recent-post-card card-base">
           <span class="recent-post-title">VFS源码深读-1.常用结构读取</span>
           <span class="recent-post-date">2026-06-27</span>
+        </a>
+      
+        <a href="/2026/06/17/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%982026-06-17/" class="recent-post-card card-base">
+          <span class="recent-post-title">每日一题2026-06-17</span>
+          <span class="recent-post-date">2026-06-17</span>
         </a>
       
         <a href="/2026/06/16/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%982026-06-16/" class="recent-post-card card-base">
